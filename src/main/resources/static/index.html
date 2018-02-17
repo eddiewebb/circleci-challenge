@@ -1,0 +1,17 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Getting Started: Serving Web Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<p id="welcome">Hello Circle CI!</p>
+<p>Click this <input id="msgButton" type="button" value="button"/> to see a message.</p>
+
+
+<p id="messageBox" style="display:none;">This page is static, <a href="/about">about</a> uses a spring web controller and Thymeleaf view</p>
+<script>
+    document.getElementById("msgButton").addEventListener("click", function(){document.getElementById("messageBox").style.display = 'inline';});
+</script>
+</body>
+</html>
