@@ -32,6 +32,13 @@ jobs:
       - store_artifacts:
           path: target/circleci-challenge-*.jar
 
+      - persist_to_workspace:
+                # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
+                root: /tmp
+                # Must be relative path from root
+                paths:
+                  - public
+
   deploy-stage:
     ## prpobably need to attach to workspace created above to pass built jar..
     docker:
