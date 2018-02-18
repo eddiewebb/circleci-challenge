@@ -19,7 +19,7 @@ And then the in [`config.yml`](.circleci/config.yml) we pass .jar and Procfile a
 
 ## Viewing
 
-The latest version should be visible on [https://boiling-falls-60288.herokuapp.com/about]
+The latest version should be visible on [https://boiling-falls-60288.herokuapp.com]
 
 
 ## Running locally
