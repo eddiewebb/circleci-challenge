@@ -23,7 +23,7 @@ jobs:
 
       - run:
           name: Build and test
-          command:
+          command: |
             mvn package -B
             cp target/circleci-challenge-*.jar /tmp/standalone-app.jar
             cp Procfile /tmp/Procfile
