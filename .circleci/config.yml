@@ -32,10 +32,26 @@ jobs:
       - store_artifacts:
           path: target/circleci-challenge-*.jar
 
-
+  deploy-stage:
+    ## prpobably need to attach to workspace created above to pass built jar..
+    docker:
+      - image: circleci/openjdk:8-jdk-browsers
+    working_directory: ~/deploy
+    steps:
+      - run:
+          name: Run setup script
+          command: bash .circleci/setup-heroku.sh
+      - add_ssh_keys
+          fingerprints:
+            - "61:5e:f5:cc:d6:58:84:c6:d2:af:68:0a:5d:e5:e4:f2"
+      - run:
+          name: Keroku Deploy
+          command: |
+            git push --force git@heroku.com:$HEROKU_APP_NAME.git HEAD:refs/heads/master
 
 workflows:
   version: 2
   build-deploy:
     jobs:
       - build
+      - deploy-stage
