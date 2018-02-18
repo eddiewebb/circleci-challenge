@@ -51,7 +51,7 @@ jobs:
       # why rebuild something we already tested, rebuilding invalidates any previous confidence?!
       - attach_workspace:
           at: /tmp
-          
+
       - run:
           name: Run setup script
           command: bash /tmp/setup-heroku.sh
