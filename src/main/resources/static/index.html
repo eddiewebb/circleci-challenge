@@ -9,9 +9,9 @@
 <p>Click this <input id="msgButton" type="button" value="button"/> to see a message.</p>
 
 
-<p id="messageBox" style="display:none;">This page is static, <a href="/about">about</a> uses a spring web controller and Thymeleaf view</p>
+<p id="msgBox" style="display:none;">This page is static, <a href="/about">about</a> uses a spring web controller and Thymeleaf view</p>
 <script>
-    document.getElementById("msgButton").addEventListener("click", function(){document.getElementById("messageBox").style.display = 'inline';});
+    document.getElementById("msgButton").addEventListener("click", function(){document.getElementById("msgBox").style.display = 'inline';});
 </script>
 </body>
 </html>
