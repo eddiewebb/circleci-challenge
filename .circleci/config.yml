@@ -16,17 +16,15 @@ jobs:
            - ~/.m2
           key: circleci-challenge-{{ checksum "pom.xml" }}
 
-
       - run:
           name: Install phantomjs
           command:
-            curl -O https://github.com/ariya/phantomjs/releases/download/2.1.3/phantomjs
-
+            sudo apt-get install -y phantomjs
 
       - run:
           name: Build and test
           command:
-            mvn package -Dphantomjs.binary.path="$PWD/phantomjs"
+            mvn package -B
 
       - store_test_results:
           path: target/surefire-reports
