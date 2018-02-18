@@ -29,7 +29,6 @@ jobs:
           name: Copy deployment artifacts to workspace
           command: |
             cp target/circleci-challenge-*.jar /tmp/standalone-app.jar
-            cp Procfile /tmp/Procfile
             cp .circleci/setup-heroku.sh /tmp/setup-heroku.sh
 
       - store_test_results:
@@ -42,7 +41,6 @@ jobs:
                 root: /tmp
                 paths:
                   - standalone-app.jar
-                  - Procfile
                   - setup-heroku.sh
 
   deploy-stage:
@@ -53,20 +51,19 @@ jobs:
       # why rebuild something we already tested, rebuilding invalidates any previous confidence?!
       - attach_workspace:
           at: /tmp
+          
       - run:
           name: Run setup script
           command: bash /tmp/setup-heroku.sh
-      - add_ssh_keys:
-          fingerprints:
-            - "61:5e:f5:cc:d6:58:84:c6:d2:af:68:0a:5d:e5:e4:f2"
+
       - run:
-          name: Keroku Deploy
+          name: Heroku Deploy
           command: |
             cp /tmp/standalone-app.jar .
-            cp /tmp/Procfile .
             ls -la
-            git push --force git@heroku.com:$HEROKU_APP_NAME.git HEAD:refs/heads/master
-
+            heroku plugins:install heroku-cli-deploy
+            heroku plugins:install heroku-cli-deploy  # when debugging on circle image, first run succeeded, but did not make plugin available
+            heroku deploy:jar standalone-app.jar --app $HEROKU_APP_NAME
 
 workflows:
   version: 2
