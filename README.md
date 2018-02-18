@@ -29,3 +29,10 @@ Spring boot!
 ```
 mvn spring-boot:run
 ```
+
+
+## Evolution
+
+- Getting initial build to compile and pass tests in circleci was straightforward [build-3](https://circleci.com/gh/eddiewebb/circleci-challenge/3) 
+- Subsequently setup heroku account and local CLI, which was easy enough.
+- Adding heroku as isolated job in circleci workflow broke a few builds but back on track by [build 12](https://circleci.com/gh/eddiewebb/circleci-challenge/12)
