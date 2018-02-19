@@ -3,6 +3,7 @@
 Build, Test and Deploy a simple webapp using CircleCI and Heroku.
 [![CircleCI](https://circleci.com/gh/eddiewebb/circleci-challenge.svg?style=svg)](https://circleci.com/gh/eddiewebb/circleci-challenge)
 
+
 ##  Testing
 To test simple UI functionality we're using Spring Boot's test starter and PhantomJS binaries driven through Selenium's `WebDriver` interface.
 
@@ -49,3 +50,26 @@ mvn spring-boot:run
   This eliminated need for SSH key (git.heroku.com) and `verifyHosts` hack in tutorial, while also appeasing my **"build once run anywhere"** desires.
 - By [build 17](https://circleci.com/workflow-run/231448cf-2486-4a5a-821f-dfe2d623f427) the end to end workflow with seperate build and deploy jobs was passing.
   Heroku cli deploys the jar which is passed via circleCI's `workspace` support. 
+  
+  
+## Previous CircleCI Experience
+
+Eddie has used CircleCI previously to deploy his [personal website](https://edwardawebb.com) built with Hugo. 
+[That project's config.yml](https://github.com/eddiewebb/json-resume/blob/master/.circleci/config.yml) deploys a test domain for all branches, and a prod domain for `master` branch only.
+```
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - build
+      - deploy-stage:
+          requires:
+            - build
+      - deploy-prod:
+          requires:
+            - deploy-stage
+          filters:
+            branches:
+              only: master
+```
+
