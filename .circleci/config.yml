@@ -35,7 +35,7 @@ jobs:
           path: target/surefire-reports
 
       - store_artifacts:
-          path: target/circleci-challenge-*.jar
+          path: /tmp/standalone-app.jar
 
       - persist_to_workspace:
                 root: /tmp
