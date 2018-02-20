@@ -15,6 +15,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.StringContains.containsString;
 
 @SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.RANDOM_PORT)
 @RunWith(SpringRunner.class)
@@ -29,7 +30,7 @@ public class HomePageTests {
     @Test
     public void testHomePageLoads() throws Exception {
         webDriver.get(getUrl());
-        assertThat("Did not find welcome text",webDriver.findElement(By.id("welcome")).getText(),is("Hello Circle CI!"));
+        assertThat("Did not find welcome text",webDriver.findElement(By.id("welcome")).getText(),containsString("Hello Circle CI!"));
     }
 
     @Test
