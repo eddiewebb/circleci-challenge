@@ -5,11 +5,11 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
-<p id="welcome">Hello Circle CI!</p>
-<p>Click this <input id="msgButton" type="button" value="button"/> to see a message.</p>
+<p id="welcome">Hello Circle CI! The latest build status for this site's CI pipeline is : <img src="https://circleci.com/gh/eddiewebb/circleci-challenge.svg?style=svg"/></p>
+<p>Click this <input id="msgButton" type="button" value="button"/> to see a hidden message.</p>
 
 
-<p id="msgBox" style="display:none;">This page is static, <a href="/about">about</a> uses a spring web controller and Thymeleaf view</p>
+<p id="msgBox" style="display:none;">This page is static, <a href="/about">about</a> uses a spring web controller and Thymeleaf view and contains more information about this project.</p>
 <script>
     document.getElementById("msgButton").addEventListener("click", function(){document.getElementById("msgBox").style.display = 'inline';});
 </script>
