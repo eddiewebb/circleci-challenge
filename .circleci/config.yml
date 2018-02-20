@@ -74,7 +74,7 @@ jobs:
             # Heroku deploy command will pass even if application crashes. Simple smoke test to make sure app is up.
             HTTPCODE=`curl -s -o /dev/null -w "%{http_code}" https://$HEROKU_APP_NAME.herokuapp.com`
             if [ "$HTTPCODE" -ne 200 ];then
-              echo "index.html not found, failing"
+              echo "heroku app not responding, failing deploy"
               exit 1
             fi
 
@@ -109,12 +109,12 @@ jobs:
             # Verify new version is working on dark URL.
             HTTPCODE=`curl -s -o /dev/null -w "%{http_code}" https://circleci-dark.cfapps.io/`
             if [ "$HTTPCODE" -ne 200 ];then
-              echo "index.html not found, failing"
+              echo "dark route note available, failing deploy"
               exit 1
             fi
             # Send "real" url to new version
             cf map-route circleci-dark cfapps.io -n circleci-challenge
-            # Stop sending traffice to previous version
+            # Stop sending traffic to previous version
             cf unmap-route circleci-challenge cfapps.io -n circleci-challenge
             # stop previous version
             cf stop circleci-challenge
