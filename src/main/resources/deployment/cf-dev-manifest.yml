@@ -1,0 +1,5 @@
+---
+applications:
+- name: circleci-challenge
+  memory: 768M
+  instances: 1

@@ -1,6 +1,5 @@
 package com.edwardawebb.circleci.demo;
 
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;

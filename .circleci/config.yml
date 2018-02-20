@@ -30,20 +30,24 @@ jobs:
           command: |
             cp target/circleci-challenge-*.jar /tmp/standalone-app.jar
             cp .circleci/setup-heroku.sh /tmp/setup-heroku.sh
+            cp src/main/resources/deployment/cf-dev-manifest.yml /tmp/
 
       - store_test_results:
           path: target/surefire-reports
 
       - store_artifacts:
           path: /tmp/standalone-app.jar
+      - store_artifacts:
+          path: /tmp/cf-dev-manifest.yml
 
       - persist_to_workspace:
                 root: /tmp
                 paths:
                   - standalone-app.jar
                   - setup-heroku.sh
+                  - cf-dev-manifest.yml
 
-  deploy-stage:
+  deploy-heroku:
     docker:
       - image: circleci/openjdk:8-jdk-browsers
     working_directory: ~/deploy
@@ -74,11 +78,60 @@ jobs:
               exit 1
             fi
 
+
+  deploy-cf:
+    docker:
+      - image: circleci/openjdk:8-jdk-browsers
+    working_directory: ~/deploy
+    steps:
+      # why rebuild something we already tested, rebuilding invalidates any previous confidence?!
+      - attach_workspace:
+          at: /tmp
+
+      - run:
+          name: Setup CF CLI
+          command: |
+            curl -v -L -o cf-cli_amd64.deb 'https://cli.run.pivotal.io/stable?release=debian64&source=github'
+            sudo dpkg -i cf-cli_amd64.deb
+            cf -v
+            cf api https://api.run.pivotal.io
+            cf auth $CF_USER $CF_PASSWORD
+            cf target -o eddies-org -s development
+
+      - run:
+          name: CF Deploy
+          command: |
+            # Copy deployable jar and CF Manifest to current dir
+            cp /tmp/standalone-app.jar .
+            cp /tmp/cf-dev-manifest.yml .
+            # Push as "dark" instance
+            cf push circleci-dark -f cf-dev-manifest.yml -p standalone-app.jar -n circleci-dark
+            # Verify new version is working on dark URL.
+            HTTPCODE=`curl -s -o /dev/null -w "%{http_code}" https://circleci-dark.cfapps.io/`
+            if [ "$HTTPCODE" -ne 200 ];then
+              echo "index.html not found, failing"
+              exit 1
+            fi
+            # Send "real" url to new version
+            cf map-route circleci-dark cfapps.io -n circleci-challenge
+            # Stop sending traffice to previous version
+            cf unmap-route circleci-challenge cfapps.io -n circleci-challenge
+            # stop previous version
+            cf stop circleci-challenge
+            # delete previous version
+            cf delete circleci-challenge -f
+            # Switch name of "dark" version to claim correct name
+            cf rename circleci-dark circleci-challenge
+
+
 workflows:
   version: 2
   build-deploy:
     jobs:
       - build
-      - deploy-stage:
+      - deploy-heroku:
+          requires:
+            - build
+      - deploy-cf:
           requires:
             - build
