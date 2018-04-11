@@ -2,13 +2,18 @@ package com.edwardawebb.circleci.demo;
 
 import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.phantomjs.PhantomJSDriver;
+import org.openqa.selenium.logging.LogType;
+import org.openqa.selenium.logging.LoggingPreferences;
+import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.logging.Level;
 
 
 @SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -17,20 +22,34 @@ public abstract class AbstractWebTests {
 
     @LocalServerPort
     private int serverPort;
-    @Autowired
     WebDriver webDriver;
 
-    protected String getBaseUrl() {
-        return "http://localhost:" + serverPort;
-    }
+    // Enable Sauce Labs browser testing, compliment Open Source license.  SauceLabs.com
+    final String BASE_URL;
+    private static String SAUCE_USER = System.getenv("sauceUser");
+    private static String SAUCE_ACCESS_KEY = System.getenv("sauceApiKey");
+    public static final String SAUCE_URL = "http://" + SAUCE_USER + ":" + SAUCE_ACCESS_KEY + "@localhost:4445/wd/hub";
 
-    @org.springframework.boot.test.context.TestConfiguration
-    static class TestConfiguration {
-        @Bean
-        public WebDriver webDriver(){
-            DesiredCapabilities capabilities = new DesiredCapabilities();
-            capabilities.setJavascriptEnabled(true);
-            return new PhantomJSDriver(capabilities);
+    public AbstractWebTests() {
+        BASE_URL = "http://localhost:" + serverPort;
+        try {
+            webDriver = createWebDriver();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
         }
     }
+
+
+    public WebDriver  createWebDriver() throws MalformedURLException {
+        DesiredCapabilities caps = DesiredCapabilities.chrome();
+        caps.setCapability("platform", "Windows 10");
+        caps.setCapability("version", "57.0");
+        LoggingPreferences logPrefs = new LoggingPreferences();
+        logPrefs.enable(LogType.BROWSER, Level.INFO);
+        caps.setCapability(CapabilityType.LOGGING_PREFS, logPrefs);
+        System.out.println("Testing against BaseURL: " + BASE_URL);
+        return new RemoteWebDriver(new URL(SAUCE_URL), caps);
+    }
+
+
 }
