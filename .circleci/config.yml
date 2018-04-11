@@ -18,7 +18,7 @@ jobs:
 
       - run:
           name: Start SauceLabs Tunnel (required if testing on CircleCI container)
-          command:
+          command: |
             curl https://saucelabs.com/downloads/sc-4.4.12-linux.tar.gz -o saucelabs.tar.gz
             tar -xzf saucelabs.tar.gz
             cd sc-*
