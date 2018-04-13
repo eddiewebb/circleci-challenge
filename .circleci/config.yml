@@ -2,8 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      #- image: circleci/openjdk:8-jdk-browsers
-      - image: eddiewebb/circleci-openjdk-queue:8-jdk-browsers
+      - image: circleci/openjdk:8-jdk-browsers
     working_directory: ~/repo
     steps:
       - checkout
@@ -90,7 +89,8 @@ jobs:
 
   deploy-cf:
     docker:
-      - image: circleci/openjdk:8-jdk-browsers
+      - image: eddiewebb/circleci-openjdk-queue:8-jdk-browsers
+      #- image: circleci/openjdk:8-jdk-browsers
     working_directory: ~/deploy
     steps:
       # why rebuild something we already tested, rebuilding invalidates any previous confidence?!
