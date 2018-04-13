@@ -5,7 +5,7 @@ Build, Test and Deploy a simple webapp using CircleCI and Heroku.
 
 
 ##  Testing
-To test simple UI functionality we're using Spring Boot's test starter and PhantomJS binaries driven through Selenium's `WebDriver` interface.
+To test simple UI functionality we're using Spring Boot's test starter and SauceLabs Connect Tunnel binaries driven through Selenium's `WebDriver` interface.
 
 You can see these simple tests in [HomePagesTests.java](src/test/java/com/edwardawebb/circleci/demo/HomePageTests.java)
 
