@@ -89,7 +89,7 @@ jobs:
 
   deploy-cf:
     docker:
-      - image: eddiewebb/circleci-openjdk-queue:8-jdk-browsers
+      - image: eddiewebb/queue-circleci-openjdk:8-jdk-browsers
       #- image: circleci/openjdk:8-jdk-browsers
     working_directory: ~/deploy
     steps:
