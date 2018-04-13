@@ -2,7 +2,8 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/openjdk:8-jdk-browsers
+      #- image: circleci/openjdk:8-jdk-browsers
+      - image: eddiewebb/circleci-openjdk:8-jdk-browsers
     working_directory: ~/repo
     steps:
       - checkout
@@ -96,6 +97,7 @@ jobs:
       - attach_workspace:
           at: /tmp
 
+      - run: queueBuildUntilFrontOfLine 5 #do not run parallel deployments
       - run:
           name: Setup CF CLI
           command: |
